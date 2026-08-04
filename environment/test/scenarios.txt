@@ -1,0 +1,8 @@
+
+Some scenarios to run from devices directory:
+
+mvn test -Dtest=GpsDataSenderTest#having_mac_and_positions_send_them_once
+
+
+
+

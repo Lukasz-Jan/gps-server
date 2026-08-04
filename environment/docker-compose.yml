@@ -1,0 +1,182 @@
+services:
+
+  mongodbsrv:
+    image:
+      mongodb/mongodb-community-server:latest
+    container_name: mongodbsrv
+    ports:
+      - "127.0.0.1:27017:27017"
+
+  register_srv_1:
+    image:
+      register_srv
+    depends_on:
+      - mongodbsrv
+      - active_mq
+    container_name: register_srv_1
+    ports:
+      - "127.0.0.1:8083:8082"
+      - "35005:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq:61616
+
+  register_srv_2:
+    image:
+      register_srv
+    build:
+      context: ..
+    depends_on:
+      - mongodbsrv
+      - active_mq
+    container_name: register_srv_2
+    ports:
+      - "127.0.0.1:8084:8082"
+      - "35006:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq:61616
+
+  register_forwarder:
+    image:
+      register_forwarder
+    depends_on:
+      - mongodbsrv
+      - active_mq
+    container_name: register_forwarder
+    ports:
+      - "127.0.0.1:8090:8090"
+      - "35007:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq:61616
+
+  register_responder:
+    image:
+      register_responder
+    depends_on:
+      - mongodbsrv
+      - active_mq
+    container_name: register_responder
+    ports:
+      - "127.0.0.1:8091:8091"
+      - "35008:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq:61616
+
+  position_srv_1:
+    image:
+      position_srv
+    depends_on:
+      - mongodbsrv
+      - active_mq_2
+    container_name: position_srv_1
+    ports:
+      - "127.0.0.1:8095:8095"
+      - "35009:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq-2:61616
+
+  position_srv_2:
+    image:
+      position_srv
+    depends_on:
+      - mongodbsrv
+      - active_mq_2
+    container_name: position_srv_2
+    ports:
+      - "127.0.0.1:8096:8095"
+      - "35010:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq-2:61616
+
+  position_srv_3:
+    image:
+      position_srv
+    depends_on:
+      - mongodbsrv
+      - active_mq_2
+    container_name: position_srv_3
+    ports:
+      - "127.0.0.1:9003:8095"
+      - "35015:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq-2:61616
+
+  position_forwarder:
+    image:
+      position_forwarder
+    depends_on:
+      - active_mq_2
+    container_name: position-forwarder
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "35011:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq-2:61616
+
+  position_forwarder_2:
+    image:
+      position_forwarder
+    depends_on:
+      - active_mq_2
+    container_name: position-forwarder_2
+    ports:
+      - "127.0.0.1:9002:9000"
+      - "35013:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq-2:61616
+
+  position_responder:
+    image:
+      position_responder
+    depends_on:
+      - mongodbsrv
+      - active_mq_2
+    container_name: position-responder
+    ports:
+      - "127.0.0.1:9001:9001"
+      - "35012:5005"
+    restart: "no"
+    environment:
+      - spring.activemq.broker-url=tcp://active-mq-2:61616
+
+  active_mq:
+    image:
+      apache/activemq-classic:5.19.2
+
+    container_name: active-mq
+    expose:
+      - "61616"
+      - "8161"
+    ports:
+      - "61616:61616"   # JMS
+      - "8161:8161"
+    links:
+      - mongodbsrv
+    restart: "no"
+
+  active_mq_2:
+    image:
+      apache/activemq-classic:5.19.2
+
+    container_name: active-mq-2
+    expose:
+      - "61616"
+      - "8161"
+    ports:
+      - "61617:61616"   # JMS
+      - "8162:8161"
+    links:
+      - mongodbsrv
+    restart: "no"
+
+
+
+
