@@ -1,0 +1,16 @@
+package com.gps.shared.documents;
+
+import com.gps.shared.Constants;
+import com.gps.shared.messages.DeviceType;
+import com.gps.shared.messages.request.dto.data.Position;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
+
+@Document(collection = Constants.GPS_DATA_COLLECTION)
+public record Account(
+        @Id
+        String macAddress,
+        String deviceName, String owner, DeviceType deviceType, List<Position> list) {
+}
