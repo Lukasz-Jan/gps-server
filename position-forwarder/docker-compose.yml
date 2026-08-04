@@ -1,0 +1,23 @@
+services:
+
+  mongodbsrv:
+    image:
+      mongodb/mongodb-community-server:latest
+    container_name: mongodbsrv
+    ports:
+      - "127.0.0.1:27017:27017"
+
+  active_mq_2:
+    image:
+      apache/activemq-classic:5.19.2
+
+    container_name: active-mq-2
+    expose:
+      - "61616"
+      - "8161"
+    ports:
+      - "61616:61616"   # JMS
+      - "8161:8161"
+    links:
+      - mongodbsrv
+    restart: "no"
