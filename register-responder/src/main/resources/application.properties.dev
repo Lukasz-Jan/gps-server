@@ -1,0 +1,9 @@
+logging.level.root=info
+logging.level.org.springframework.web=INFO
+
+spring.devtools.restart.enabled=false
+
+server.port=8091
+
+spring.activemq.broker-url=tcp://localhost:61616
+registerResponseQueue=registerResponseQueue

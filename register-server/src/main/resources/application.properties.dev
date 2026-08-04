@@ -1,0 +1,12 @@
+logging.level.root=info
+logging.level.org.springframework.web=INFO
+
+spring.devtools.restart.enabled=false
+
+server.port=8082
+
+spring.activemq.broker-url=tcp://localhost:61616
+registerQueue=registerQueue
+registerResponseQueue=registerResponseQueue
+
+mongoConnString=mongodb://127.0.0.1:27017/test
